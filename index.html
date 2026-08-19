@@ -415,30 +415,37 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
+/* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
 [data-ent]{ opacity:0; }
-.rev[data-ent]{ transform:none; filter:none; }
 [data-ent="gira"]{ transform:rotate(-13deg) scale(.62) translate3d(0,54px,0); filter:blur(14px); transform-origin:50% 120%; }
 [data-ent="sobe"]{ clip-path:inset(100% 0 0 0); transform:translate3d(0,46px,0); }
 [data-ent="doislados"]{ clip-path:inset(0 50% 0 50%); transform:scaleX(.9); }
 [data-ent="ovaltopo"]{ clip-path:ellipse(20% 0% at 50% 0%); }
 [data-ent="ovalbase"]{ clip-path:ellipse(20% 0% at 50% 100%); }
 [data-ent="zoom"]{ transform:scale(1.22); filter:blur(20px); }
+[data-ent="cortina"]{ clip-path:inset(0 0 100% 0); transform:translate3d(0,-24px,0); }
+[data-ent="ladoesq"]{ clip-path:inset(0 0 0 34%); transform:translate3d(-64px,0,0); }
+[data-ent="ladodir"]{ clip-path:inset(0 34% 0 0); transform:translate3d(64px,0,0); }
+[data-ent="iris"]{ clip-path:circle(0% at 50% 50%); transform:scale(1.06); }
+[data-ent="letras"]{ opacity:0; }
 [data-ent].feito{ opacity:1; transform:none; filter:none; clip-path:none; }
 .barraVarre{ position:absolute; inset:0; z-index:5; display:block; pointer-events:none; transform:scaleX(1); }
 
-/* ---------- cortina de abertura (o equivalente autoral do Rive) ---------- */
-#cortina{
-  position:fixed; inset:0; z-index:9999; display:grid; place-items:center;
-  pointer-events:none; will-change:clip-path,transform;
-}
-#cortina .fundoCort{ position:absolute; inset:0; }
-#cortina .assina{ position:relative; width:min(52vw,300px); }
-#cortina .assina svg{ width:100%; height:auto; display:block; overflow:visible; }
-#cortina .assina path, #cortina .assina line, #cortina .assina circle{
-  fill:none; stroke-linecap:round; stroke-linejoin:round;
-}
-#cortina.desce{ transform:translate3d(0,112vh,0); transition:transform 1.05s cubic-bezier(.645,.045,.355,1); }
-
+/* ---------- cena de abertura ---------- */
+#cortina{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;will-change:clip-path}
+#cortina .fundoCort{position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 40%, #2a0050 0%, #10002b 52%, #050010 100%)}
+.faiscasAbre{position:absolute;inset:0;width:100%;height:100%}
+.cenaAbre{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6vh,18px)}
+.mmAbre{width:clamp(150px,21vw,300px);filter:drop-shadow(0 0 34px rgba(217,4,168,.45)) drop-shadow(0 0 80px rgba(157,78,221,.35))}
+/* a marca da abertura e a mesma do hero: Shrikhand, sem substituto generico */
+.nomeAbre{font-family:'Shrikhand',cursive;font-weight:400;font-size:clamp(40px,7.4vw,104px);line-height:.92;
+  letter-spacing:.01em;color:#fff;text-transform:uppercase;opacity:0;text-shadow:0 0 40px rgba(217,4,168,.35)}
+.assinAbre{display:flex;align-items:center;gap:10px;opacity:0;
+  font-size:clamp(11px,1.5vw,15px);letter-spacing:.26em;text-transform:lowercase;color:#c8b6ff}
+.assinAbre img{width:clamp(22px,2.6vw,34px)}
+.varinhaAbre{position:absolute;left:0;top:42vh;width:clamp(110px,15vw,200px);opacity:0;
+  filter:drop-shadow(0 0 26px rgba(255,158,0,.6))}
 body.travado{overflow:hidden}
 
 
@@ -461,19 +468,16 @@ body.travado{overflow:hidden}
 </head>
 <body class="travado">
 
-<!-- cortina de abertura: abre grande, fecha num quadrado, assina e desce -->
+<!-- abertura: a varinha cruza o escuro e o que ela toca acende -->
 <div id="cortina" aria-hidden="true">
-  <div class="fundoCort" style="background:var(--bg)"></div>
-  <div class="assina">
-    <svg viewBox="0 0 220 220">
-      <!-- a orbita da nave e o rastro da varinha, desenhados traco a traco -->
-      <circle class="traco" cx="110" cy="112" r="72" stroke="#9d4edd" stroke-width="3"/>
-      <path class="traco" d="M46 138 C74 92 146 92 174 138" stroke="#d904a8" stroke-width="7"/>
-      <path class="traco" d="M110 40 L118 74 L152 82 L118 90 L110 124 L102 90 L68 82 L102 74 Z" stroke="#ff9e00" stroke-width="4"/>
-    </svg>
-    <img class="selo" src="img-fada/mamalivre-mm.png" alt=""
-         style="position:absolute;inset:0;margin:auto;width:46%;opacity:0;transform:scale(.8)">
+  <div class="fundoCort"></div>
+  <canvas class="faiscasAbre"></canvas>
+  <div class="cenaAbre">
+    <img class="mmAbre" src="img-fada/mamalivre-mm.png" alt="">
+    <div class="nomeAbre">MAMALIVRE</div>
+    <div class="assinAbre"><img src="img-fada/logo-ufo.png" alt=""><span>by fada espacial</span></div>
   </div>
+  <img class="varinhaAbre" src="img-fada/varinha.png" alt="">
 </div>
 
 
@@ -535,7 +539,7 @@ body.travado{overflow:hidden}
       <a class="btn p" href="#vitrine">Ver a vitrine <span class="seta">⇾</span></a>
       <a class="btn s" href="http://ig.me/m/looksfadaespacial" target="_blank" rel="noopener">Falar com a fada</a>
     </div>
-    <div class="dica rev" data-ent="varreesq">Mova o mouse ⋆ role a página</div>
+    <div class="dica rev" data-ent="iris">Mova o mouse ⋆ role a página</div>
   </div>
 </section>
 
@@ -547,8 +551,8 @@ body.travado{overflow:hidden}
   <div class="wrap">
     <div class="cabec">
       <div>
-        <div class="rot rev" data-ent="varredir">⋆ Vitrine Astral ⋆</div>
-        <h2 class="rev" data-ent="varreesq" style="margin-top:14px">Cada retalho<br>tem voz</h2>
+        <div class="rot rev" data-ent="ladodir">⋆ Vitrine Astral ⋆</div>
+        <h2 class="rev" data-ent="cortina" style="margin-top:14px">Cada retalho<br>tem voz</h2>
       </div>
       <p class="rev" data-ent="sobe">Quatro caminhos dentro do universo da fada. Nenhuma peça sai igual à outra.</p>
     </div>
@@ -580,11 +584,11 @@ body.travado{overflow:hidden}
       </div>
     </div>
     <div class="sobreTxt">
-      <img class="selo-ufo rev" data-ent="doislados" src="img-fada/logo-ufo.png" alt="Disco voador da Fada Espacial">
-      <div class="rot rev" data-ent="varredir">⋆ Sobre a Fada ⋆</div>
-      <h2 class="rev" data-ent="varreesq" style="margin-top:14px;max-width:14ch">Quem costura o universo</h2>
-      <p class="rev" data-ent="sobe">A Fada Espacial, criada por Isadora Schwartz, é mais do que uma marca, é um universo onde imaginação, identidade e liberdade se encontram. A marca nasce dando vida a looks únicos, feitos sob medida, que vão além de raves e festivais.</p>
-      <p class="rev" data-ent="sobe">Aqui, cada retalho tem voz e cada costura carrega uma intenção. Acreditamos no poder da transformação através do upcycling e na magia da criação freestyle, onde nenhuma peça é igual à outra e cada criação carrega sua própria história astral.</p>
+      <img class="selo-ufo rev" data-ent="gira" src="img-fada/logo-ufo.png" alt="Disco voador da Fada Espacial">
+      <div class="rot rev" data-ent="ladoesq">⋆ Sobre a Fada ⋆</div>
+      <h2 class="rev" data-ent="letras" style="margin-top:14px;max-width:14ch">Quem costura o universo</h2>
+      <p class="rev" data-ent="ladodir">A Fada Espacial, criada por Isadora Schwartz, é mais do que uma marca, é um universo onde imaginação, identidade e liberdade se encontram. A marca nasce dando vida a looks únicos, feitos sob medida, que vão além de raves e festivais.</p>
+      <p class="rev" data-ent="ladodir">Aqui, cada retalho tem voz e cada costura carrega uma intenção. Acreditamos no poder da transformação através do upcycling e na magia da criação freestyle, onde nenhuma peça é igual à outra e cada criação carrega sua própria história astral.</p>
       <div class="acoes rev" data-ent="doislados">
         <a class="btn s" href="https://instagram.com/looksfadaespacial" target="_blank" rel="noopener">Ver o Instagram <span class="seta">⇾</span></a>
       </div>
@@ -595,14 +599,14 @@ body.travado{overflow:hidden}
 <!-- ================= CONFIANCA ================= -->
 <section id="confianca" data-bloco>
   <div class="wrap">
-    <div class="rot rev" data-ent="varredir">⋆ Guia da Fada ⋆</div>
-    <h2 class="rev" data-ent="varreesq" style="margin-top:14px;max-width:16ch">O processo, sem letra miúda</h2>
+    <div class="rot rev" data-ent="ladodir">⋆ Guia da Fada ⋆</div>
+    <h2 class="rev" data-ent="cortina" style="margin-top:14px;max-width:16ch">O processo, sem letra miúda</h2>
 
     <div class="confia">
-      <div class="pastilha rev" data-ent="gira"><div class="rot">Pagamento</div><b>Pix ou link</b><small>No link dá para parcelar. As taxas ficam por conta da cliente.</small></div>
-      <div class="pastilha rev" data-ent="doislados"><div class="rot">Entrega</div><b>Goiânia no dia seguinte</b><small>Envio via ônibus com entregadora. Demais regiões pelos Correios.</small></div>
-      <div class="pastilha rev" data-ent="sobe"><div class="rot">Prazo</div><b>30 dias de antecedência</b><small>Encomenda sob medida pede agenda. Complexidade do look altera o prazo.</small></div>
-      <div class="pastilha rev" data-ent="gira"><div class="rot">Ajuste</div><b>7 dias para enviar</b><small>Retorno analisado, ajuste feito em até 10 dias além do envio.</small></div>
+      <div class="pastilha rev" data-ent="ladoesq"><div class="rot">Pagamento</div><b>Pix ou link</b><small>No link dá para parcelar. As taxas ficam por conta da cliente.</small></div>
+      <div class="pastilha rev" data-ent="ladodir"><div class="rot">Entrega</div><b>Goiânia no dia seguinte</b><small>Envio via ônibus com entregadora. Demais regiões pelos Correios.</small></div>
+      <div class="pastilha rev" data-ent="ladoesq"><div class="rot">Prazo</div><b>30 dias de antecedência</b><small>Encomenda sob medida pede agenda. Complexidade do look altera o prazo.</small></div>
+      <div class="pastilha rev" data-ent="ladodir"><div class="rot">Ajuste</div><b>7 dias para enviar</b><small>Retorno analisado, ajuste feito em até 10 dias além do envio.</small></div>
     </div>
   </div>
 </section>
@@ -773,7 +777,7 @@ const grade = document.getElementById('grade');
 function pinta(lista){
   if(!lista.length){grade.innerHTML = '<div class="vazio">Nada encontrado nessa busca. Tente Drops, Acessórios, Coleções ou Sob Medida.</div>';return;}
   grade.innerHTML = lista.map(p=>`
-    <article class="card${p.destaque?' grande':''} rev" data-ent="sobe" data-cat="${p.cat}">
+    <article class="card${p.destaque?' grande':''} rev" data-ent="doislados" data-cat="${p.cat}">
       <div class="arte">
         <span class="etiq">${p.cat}</span>
         <span class="etiq unica">Única</span>
@@ -831,7 +835,7 @@ const PERG = [
   ['Atendimento','O atendimento é humanizado, leve e feito com troca verdadeira. Aqui, cada criação nasce também da conexão e da energia entre fada e cliente. A experiência vai além da peça: é sobre se sentir vista, acolhida e parte do processo criativo.']
 ];
 document.getElementById('faq').innerHTML = PERG.map((p,i)=>`
-  <div class="item rev" data-ent="gira" data-open="0">
+  <div class="item rev" data-ent="doislados" data-open="0">
     <button type="button">${p[0]}<span class="mais">+</span></button>
     <div class="resp"><p>${p[1]}</p></div>
   </div>`).join('');
@@ -1160,8 +1164,38 @@ observa();
     sobe:      { d:1050, e:DENTRO_FORA, de:{clipPath:'inset(100% 0% 0% 0%)', transform:'translate3d(0,46px,0)'}, para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
     doislados: { d:1100, e:DENTRO_FORA, de:{clipPath:'inset(0% 50% 0% 50%)', transform:'scaleX(.9)'},            para:{clipPath:'inset(0% 0% 0% 0%)', transform:'scaleX(1)'} },
     gira:      { d:1150, e:MOLA,        de:{transform:'rotate(-13deg) scale(.62) translate3d(0,54px,0)', filter:'blur(14px)'}, para:{transform:'rotate(0deg) scale(1) translate3d(0,0,0)', filter:'blur(0px)'} },
-    zoom:      { d:1600, e:MOLA,        de:{transform:'scale(1.22)', filter:'blur(20px)'},                       para:{transform:'scale(1)', filter:'blur(0px)'} }
+    zoom:      { d:1600, e:MOLA,        de:{transform:'scale(1.22)', filter:'blur(20px)'},                       para:{transform:'scale(1)', filter:'blur(0px)'} },
+    cortina:   { d:1000, e:DENTRO_FORA, de:{clipPath:'inset(0% 0% 100% 0%)', transform:'translate3d(0,-24px,0)'}, para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
+    ladoesq:   { d:950,  e:MOLA,        de:{clipPath:'inset(0% 0% 0% 34%)', transform:'translate3d(-64px,0,0)'},  para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
+    ladodir:   { d:950,  e:MOLA,        de:{clipPath:'inset(0% 34% 0% 0%)', transform:'translate3d(64px,0,0)'},   para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
+    iris:      { d:1250, e:DENTRO_FORA, de:{clipPath:'circle(0% at 50% 50%)', transform:'scale(1.06)'},           para:{clipPath:'circle(130% at 50% 50%)', transform:'scale(1)'} }
   };
+
+  /* letra por letra: o titulo se monta em vez de aparecer inteiro */
+  function porLetra(el, atraso){
+    if (el.dataset.dividido) return;
+    el.dataset.dividido = '1';
+    var pecas = [];
+    [].slice.call(el.childNodes).forEach(function(no){
+      if (no.nodeType !== 3) return;
+      var frag = document.createDocumentFragment();
+      no.nodeValue.split('').forEach(function(c){
+        if (c === ' '){ frag.appendChild(document.createTextNode(' ')); return; }
+        var s = document.createElement('span');
+        s.textContent = c; s.style.display = 'inline-block'; s.style.opacity = '0';
+        frag.appendChild(s); pecas.push(s);
+      });
+      el.replaceChild(frag, no);
+    });
+    el.style.opacity = '1';
+    pecas.forEach(function(s, i){
+      setTimeout(function(){
+        var a = s.animate([{opacity:0, transform:'translate3d(0,64%,0) rotate(7deg)'},{opacity:1, transform:'none'}],
+                          {duration:720, easing:MOLA, fill:'forwards'});
+        setTimeout(function(){ s.style.opacity='1'; s.style.transform='none'; try{ a.cancel(); }catch(e){} }, 800);
+      }, atraso + i*24);
+    });
+  }
 
   /* varredura: barra de cor atravessa, o texto aparece atras dela, a barra recua */
   function varrer(el, dir, atraso){
@@ -1194,6 +1228,7 @@ observa();
   function acionar(el, atraso){
     var nome = el.getAttribute('data-ent') || 'zoom';
     if (nome === 'varredir' || nome === 'varreesq'){ varrer(el, nome === 'varreesq' ? 'esq' : 'dir', atraso); return; }
+    if (nome === 'letras'){ setTimeout(function(){ porLetra(el, 0); }, atraso); return; }
     var g = GESTOS[nome] || GESTOS.zoom;
     setTimeout(function(){
       var de   = Object.assign({opacity:0}, g.de);
@@ -1230,62 +1265,97 @@ observa();
     document.querySelectorAll('[data-bloco]').forEach(function(b){ obsCoreo.observe(b); });
   }
 
-  /* ---------- cortina de abertura ----------
-     A sequencia na ordem que o Levi descreveu:
-     abre grande, fecha num quadrado, a assinatura se desenha, e desce.
-     No landonorris.com essa cena e um arquivo Rive, formato de animacao
-     autoral tocado por maquina de estados. Aqui ela e desenhada na mao,
-     em SVG por traco, sem nenhuma dependencia externa. */
+  /* ---------- abertura da MamaLivre ----------
+     Mecanica propria, nada de quadro nem de desenho generico:
+     a varinha atravessa o escuro e o que ela toca acende. O monograma
+     aparece no rastro dela, a marca se monta letra por letra, e no fim
+     a escuridao se abre num portal a partir do proprio monograma. */
   function abertura(aoTerminar){
     var cort = document.getElementById('cortina');
     if (!cort){ aoTerminar(); return; }
-    var caixa  = cort.querySelector('.assina');
-    var fundo  = cort.querySelector('.fundoCort');
-    var tracos = [].slice.call(cort.querySelectorAll('.traco'));
-    var selo   = cort.querySelector('.selo');
-    var anima  = function(el, quadros, opcoes){
+    var mm     = cort.querySelector('.mmAbre');
+    var nome   = cort.querySelector('.nomeAbre');
+    var assin  = cort.querySelector('.assinAbre');
+    var vara   = cort.querySelector('.varinhaAbre');
+    var tela   = cort.querySelector('.faiscasAbre');
+
+    function fixa(el, quadros, opcoes){
       var a = el.animate(quadros, Object.assign({fill:'forwards'}, opcoes));
-      /* aba em segundo plano nao entrega o evento de fim: o estado final entra na marra */
       setTimeout(function(){
         var f = quadros[quadros.length-1];
         for (var k in f){ el.style[k] = f[k]; }
         try{ a.cancel(); }catch(e){}
       }, (opcoes.duration||0) + (opcoes.delay||0) + 90);
       return a;
-    };
-
-    /* 1. abre grande e 2. fecha num quadrado centrado */
-    var lado = Math.min(window.innerWidth, window.innerHeight) * 0.46;
-    var hx = Math.max(0, (window.innerWidth  - lado) / 2 / window.innerWidth  * 100);
-    var hy = Math.max(0, (window.innerHeight - lado) / 2 / window.innerHeight * 100);
-    var quadrado = 'inset(' + hy.toFixed(2) + '% ' + hx.toFixed(2) + '% ' + hy.toFixed(2) + '% ' + hx.toFixed(2) + '%)';
-    anima(fundo, [{clipPath:'inset(0% 0% 0% 0%)'},{clipPath:quadrado}],
-          {duration:1050, delay:240, easing:'cubic-bezier(.645,.045,.355,1)'});
-    anima(caixa, [{opacity:0, transform:'scale(.86)'},{opacity:1, transform:'scale(1)'}],
-          {duration:900, delay:300, easing:'cubic-bezier(.16,1,.3,1)'});
-
-    /* 3. a assinatura se desenha dentro do quadrado */
-    tracos.forEach(function(t, i){
-      var c = t.getTotalLength ? t.getTotalLength() : 900;
-      t.style.strokeDasharray = c;
-      anima(t, [{strokeDashoffset:c},{strokeDashoffset:0}],
-            {duration:1050, delay:1180 + i*160, easing:'cubic-bezier(.645,.045,.355,1)'});
-    });
-    if (selo){
-      /* o traco recua quando a marca entra: a assinatura conduz, a marca conclui */
-      tracos.forEach(function(t){ anima(t, [{opacity:1},{opacity:.3}], {duration:700, delay:1820, easing:'ease'}); });
-      anima(selo, [{opacity:0, transform:'scale(.8)'},{opacity:1, transform:'scale(1)'}],
-            {duration:900, delay:1800, easing:'cubic-bezier(.16,1,.3,1)'});
     }
 
-    /* 4. desce e entrega a pagina */
+    /* 1. a varinha cruza a tela da esquerda para a direita */
+    var larg = window.innerWidth;
+    fixa(vara, [{transform:'translate3d(-18vw,6vh,0) rotate(-26deg)', opacity:0},
+                {transform:'translate3d(-4vw,0,0) rotate(-18deg)',    opacity:1, offset:.14},
+                {transform:'translate3d(34vw,-3vh,0) rotate(-6deg)',  opacity:1, offset:.62},
+                {transform:'translate3d(64vw,-14vh,0) rotate(16deg)', opacity:0}],
+               {duration:2100, delay:180, easing:'cubic-bezier(.45,.05,.3,1)'});
+
+    /* 2. o monograma acende no rastro dela, revelado da esquerda para a direita */
+    fixa(mm, [{clipPath:'inset(0% 100% 0% 0%)', opacity:.25, filter:'blur(9px)'},
+              {clipPath:'inset(0% 0% 0% 0%)',   opacity:1,   filter:'blur(0px)'}],
+             {duration:1500, delay:420, easing:'cubic-bezier(.215,.61,.355,1)'});
+
+    /* 3. faiscas caindo do rastro, desenhadas em canvas */
+    if (tela && tela.getContext){
+      var ct = tela.getContext('2d');
+      tela.width = larg; tela.height = window.innerHeight;
+      var faiscas = [], inicio = performance.now();
+      (function laco(t){
+        var dt = t - inicio;
+        if (dt > 3400){ return; }
+        if (dt > 300 && dt < 2300 && faiscas.length < 260){
+          var prog = Math.min(1, (dt-300)/2000);
+          var x = larg*0.30 + prog*larg*0.42, y = window.innerHeight*0.44 - prog*window.innerHeight*0.10;
+          for (var i=0;i<3;i++){
+            faiscas.push({x:x+(Math.sin(dt*0.05+i)*26), y:y+(Math.cos(dt*0.04+i)*18),
+                          vx:(Math.sin(i*2.1)*0.5), vy:0.35+Math.abs(Math.cos(i))*0.6,
+                          v:1, cor: i%3===0 ? '255,158,0' : (i%3===1 ? '217,4,168' : '200,182,255')});
+          }
+        }
+        ct.clearRect(0,0,tela.width,tela.height);
+        faiscas.forEach(function(f){
+          f.x += f.vx; f.y += f.vy; f.v -= 0.006;
+          if (f.v <= 0) return;
+          ct.globalAlpha = Math.max(0, f.v);
+          ct.fillStyle = 'rgba(' + f.cor + ',1)';
+          ct.fillRect(f.x, f.y, 2.2, 2.2);
+        });
+        ct.globalAlpha = 1;
+        requestAnimationFrame(laco);
+      })(inicio);
+    }
+
+    /* 4. a marca se monta letra por letra, e a assinatura entra por baixo */
     setTimeout(function(){
-      anima(cort, [{transform:'translate3d(0,0,0)'},{transform:'translate3d(0,112vh,0)'}],
-            {duration:1050, easing:'cubic-bezier(.645,.045,.355,1)'});
+      var texto = nome.textContent; nome.textContent = ''; nome.style.opacity = '1';
+      texto.split('').forEach(function(c, i){
+        var s = document.createElement('span');
+        s.textContent = c; s.style.display = 'inline-block'; s.style.opacity = '0';
+        nome.appendChild(s);
+        setTimeout(function(){
+          fixa(s, [{opacity:0, transform:'translate3d(0,70%,0) scale(.8)'},{opacity:1, transform:'none'}],
+                  {duration:620, easing:'cubic-bezier(.16,1,.3,1)'});
+        }, i*52);
+      });
+    }, 1500);
+    fixa(assin, [{opacity:0, transform:'translate3d(0,14px,0)'},{opacity:1, transform:'none'}],
+                {duration:800, delay:2250, easing:'cubic-bezier(.16,1,.3,1)'});
+
+    /* 5. o escuro se abre num portal a partir do monograma */
+    setTimeout(function(){
+      fixa(cort, [{clipPath:'circle(150% at 50% 42%)'},{clipPath:'circle(0% at 50% 42%)'}],
+                 {duration:1150, easing:'cubic-bezier(.645,.045,.355,1)'});
       document.body.classList.remove('travado');
       aoTerminar();
-      setTimeout(function(){ if (cort.parentNode) cort.parentNode.removeChild(cort); }, 1200);
-    }, 3050);
+      setTimeout(function(){ if (cort.parentNode) cort.parentNode.removeChild(cort); }, 1300);
+    }, 3350);
   }
 
   window.addEventListener('load', function(){
