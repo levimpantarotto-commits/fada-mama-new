@@ -400,6 +400,48 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
   transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform 1.4s cubic-bezier(.16,1,.3,1),filter 1.1s cubic-bezier(.16,1,.3,1)}
 .heroTxt .rev.on{transition-duration:1.2s,1.6s,1.2s}
 
+/* ============================================================
+   COREOGRAFIA DE ENTRADA
+   Vocabulario e numeros medidos no bundle do landonorris.com
+   em 19/08/2026 (funcao de highlight e funcao de reveal oval):
+     varredura .......... clip 0.6s power2.out, barra 0.6s power2.inOut
+                          barra recua na metade da revelacao (0.3s)
+                          escalonamento entre linhas 0.15s
+     oval ............... clip 1.5s power2.inOut, ellipse 20%/0 -> 100%/120%
+                          conteudo desloca 40% e volta, letras a partir do centro
+   power2.out   = cubic-bezier(.215,.61,.355,1)
+   power2.inOut = cubic-bezier(.645,.045,.355,1)
+   ============================================================ */
+
+/* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
+/* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
+[data-ent]{ opacity:0; }
+.rev[data-ent]{ transform:none; filter:none; }
+[data-ent="gira"]{ transform:rotate(-13deg) scale(.62) translate3d(0,54px,0); filter:blur(14px); transform-origin:50% 120%; }
+[data-ent="sobe"]{ clip-path:inset(100% 0 0 0); transform:translate3d(0,46px,0); }
+[data-ent="doislados"]{ clip-path:inset(0 50% 0 50%); transform:scaleX(.9); }
+[data-ent="ovaltopo"]{ clip-path:ellipse(20% 0% at 50% 0%); }
+[data-ent="ovalbase"]{ clip-path:ellipse(20% 0% at 50% 100%); }
+[data-ent="zoom"]{ transform:scale(1.22); filter:blur(20px); }
+[data-ent].feito{ opacity:1; transform:none; filter:none; clip-path:none; }
+.barraVarre{ position:absolute; inset:0; z-index:5; display:block; pointer-events:none; transform:scaleX(1); }
+
+/* ---------- cortina de abertura (o equivalente autoral do Rive) ---------- */
+#cortina{
+  position:fixed; inset:0; z-index:9999; display:grid; place-items:center;
+  pointer-events:none; will-change:clip-path,transform;
+}
+#cortina .fundoCort{ position:absolute; inset:0; }
+#cortina .assina{ position:relative; width:min(52vw,300px); }
+#cortina .assina svg{ width:100%; height:auto; display:block; overflow:visible; }
+#cortina .assina path, #cortina .assina line, #cortina .assina circle{
+  fill:none; stroke-linecap:round; stroke-linejoin:round;
+}
+#cortina.desce{ transform:translate3d(0,112vh,0); transition:transform 1.05s cubic-bezier(.645,.045,.355,1); }
+
+body.travado{overflow:hidden}
+
+
 @media(max-width:1080px){
   .heroGrid{grid-template-columns:1fr;gap:var(--s5)}
   .palco{max-width:520px}
@@ -417,7 +459,23 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 }
 </style>
 </head>
-<body>
+<body class="travado">
+
+<!-- cortina de abertura: abre grande, fecha num quadrado, assina e desce -->
+<div id="cortina" aria-hidden="true">
+  <div class="fundoCort" style="background:var(--bg)"></div>
+  <div class="assina">
+    <svg viewBox="0 0 220 220">
+      <!-- a orbita da nave e o rastro da varinha, desenhados traco a traco -->
+      <circle class="traco" cx="110" cy="112" r="72" stroke="#9d4edd" stroke-width="3"/>
+      <path class="traco" d="M46 138 C74 92 146 92 174 138" stroke="#d904a8" stroke-width="7"/>
+      <path class="traco" d="M110 40 L118 74 L152 82 L118 90 L110 124 L102 90 L68 82 L102 74 Z" stroke="#ff9e00" stroke-width="4"/>
+    </svg>
+    <img class="selo" src="img-fada/mamalivre-mm.png" alt=""
+         style="position:absolute;inset:0;margin:auto;width:46%;opacity:0;transform:scale(.8)">
+  </div>
+</div>
+
 
 <div class="ceu"></div>
 <div class="estrelas"></div>
@@ -452,7 +510,7 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 <main>
 
 <!-- ================= HERO ================= -->
-<section class="hero">
+<section class="hero" data-bloco>
   <div class="palcoAberto" id="palco">
     <div class="orbita"></div><div class="orbita b"></div>
     <canvas id="poeira"></canvas>
@@ -471,13 +529,13 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
   </div>
 
   <div class="wrap heroTxt">
-    <div class="rot rev">Goiânia ⋆ upcycling ⋆ peça única</div>
-    <p class="frase rev">Entre fadas, bruxas e sereias, universos se entrelaçam para dar vida a infinitas expressões de ser.</p>
-    <div class="acoes rev">
+    <div class="rot rev" data-ent="varredir">Goiânia ⋆ upcycling ⋆ peça única</div>
+    <p class="frase rev" data-ent="sobe">Entre fadas, bruxas e sereias, universos se entrelaçam para dar vida a infinitas expressões de ser.</p>
+    <div class="acoes rev" data-ent="doislados">
       <a class="btn p" href="#vitrine">Ver a vitrine <span class="seta">⇾</span></a>
       <a class="btn s" href="http://ig.me/m/looksfadaespacial" target="_blank" rel="noopener">Falar com a fada</a>
     </div>
-    <div class="dica rev">Mova o mouse ⋆ role a página</div>
+    <div class="dica rev" data-ent="varreesq">Mova o mouse ⋆ role a página</div>
   </div>
 </section>
 
@@ -485,14 +543,14 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 <div class="bolhas" id="bolhas" aria-hidden="true"></div>
 
 <!-- ================= VITRINE ================= -->
-<section class="vitrine" id="vitrine">
+<section class="vitrine" id="vitrine" data-bloco>
   <div class="wrap">
     <div class="cabec">
       <div>
-        <div class="rot rev">⋆ Vitrine Astral ⋆</div>
-        <h2 class="rev" style="margin-top:14px">Cada retalho<br>tem voz</h2>
+        <div class="rot rev" data-ent="varredir">⋆ Vitrine Astral ⋆</div>
+        <h2 class="rev" data-ent="varreesq" style="margin-top:14px">Cada retalho<br>tem voz</h2>
       </div>
-      <p class="rev">Quatro caminhos dentro do universo da fada. Nenhuma peça sai igual à outra.</p>
+      <p class="rev" data-ent="sobe">Quatro caminhos dentro do universo da fada. Nenhuma peça sai igual à outra.</p>
     </div>
 
     <div class="chips" id="chips">
@@ -512,9 +570,9 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 </section>
 
 <!-- ================= RETRATO DA MARCA ================= -->
-<section class="sobre" id="sobre">
+<section class="sobre" id="sobre" data-bloco>
   <div class="wrap sobreGrid">
-    <div class="rev">
+    <div class="rev" data-ent="gira">
       <div class="retrato">
         <div class="anel"></div><div class="anel b"></div>
         <img src="img-fada/isadora-fada.png" alt="Isadora Schwartz, criadora da Fada Espacial" loading="lazy" decoding="async">
@@ -522,12 +580,12 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
       </div>
     </div>
     <div class="sobreTxt">
-      <img class="selo-ufo rev" src="img-fada/logo-ufo.png" alt="Disco voador da Fada Espacial">
-      <div class="rot rev">⋆ Sobre a Fada ⋆</div>
-      <h2 class="rev" style="margin-top:14px;max-width:14ch">Quem costura o universo</h2>
-      <p class="rev">A Fada Espacial, criada por Isadora Schwartz, é mais do que uma marca, é um universo onde imaginação, identidade e liberdade se encontram. A marca nasce dando vida a looks únicos, feitos sob medida, que vão além de raves e festivais.</p>
-      <p class="rev">Aqui, cada retalho tem voz e cada costura carrega uma intenção. Acreditamos no poder da transformação através do upcycling e na magia da criação freestyle, onde nenhuma peça é igual à outra e cada criação carrega sua própria história astral.</p>
-      <div class="acoes rev">
+      <img class="selo-ufo rev" data-ent="doislados" src="img-fada/logo-ufo.png" alt="Disco voador da Fada Espacial">
+      <div class="rot rev" data-ent="varredir">⋆ Sobre a Fada ⋆</div>
+      <h2 class="rev" data-ent="varreesq" style="margin-top:14px;max-width:14ch">Quem costura o universo</h2>
+      <p class="rev" data-ent="sobe">A Fada Espacial, criada por Isadora Schwartz, é mais do que uma marca, é um universo onde imaginação, identidade e liberdade se encontram. A marca nasce dando vida a looks únicos, feitos sob medida, que vão além de raves e festivais.</p>
+      <p class="rev" data-ent="sobe">Aqui, cada retalho tem voz e cada costura carrega uma intenção. Acreditamos no poder da transformação através do upcycling e na magia da criação freestyle, onde nenhuma peça é igual à outra e cada criação carrega sua própria história astral.</p>
+      <div class="acoes rev" data-ent="doislados">
         <a class="btn s" href="https://instagram.com/looksfadaespacial" target="_blank" rel="noopener">Ver o Instagram <span class="seta">⇾</span></a>
       </div>
     </div>
@@ -535,33 +593,33 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 </section>
 
 <!-- ================= CONFIANCA ================= -->
-<section id="confianca">
+<section id="confianca" data-bloco>
   <div class="wrap">
-    <div class="rot rev">⋆ Guia da Fada ⋆</div>
-    <h2 class="rev" style="margin-top:14px;max-width:16ch">O processo, sem letra miúda</h2>
+    <div class="rot rev" data-ent="varredir">⋆ Guia da Fada ⋆</div>
+    <h2 class="rev" data-ent="varreesq" style="margin-top:14px;max-width:16ch">O processo, sem letra miúda</h2>
 
     <div class="confia">
-      <div class="pastilha rev"><div class="rot">Pagamento</div><b>Pix ou link</b><small>No link dá para parcelar. As taxas ficam por conta da cliente.</small></div>
-      <div class="pastilha rev"><div class="rot">Entrega</div><b>Goiânia no dia seguinte</b><small>Envio via ônibus com entregadora. Demais regiões pelos Correios.</small></div>
-      <div class="pastilha rev"><div class="rot">Prazo</div><b>30 dias de antecedência</b><small>Encomenda sob medida pede agenda. Complexidade do look altera o prazo.</small></div>
-      <div class="pastilha rev"><div class="rot">Ajuste</div><b>7 dias para enviar</b><small>Retorno analisado, ajuste feito em até 10 dias além do envio.</small></div>
+      <div class="pastilha rev" data-ent="gira"><div class="rot">Pagamento</div><b>Pix ou link</b><small>No link dá para parcelar. As taxas ficam por conta da cliente.</small></div>
+      <div class="pastilha rev" data-ent="doislados"><div class="rot">Entrega</div><b>Goiânia no dia seguinte</b><small>Envio via ônibus com entregadora. Demais regiões pelos Correios.</small></div>
+      <div class="pastilha rev" data-ent="sobe"><div class="rot">Prazo</div><b>30 dias de antecedência</b><small>Encomenda sob medida pede agenda. Complexidade do look altera o prazo.</small></div>
+      <div class="pastilha rev" data-ent="gira"><div class="rot">Ajuste</div><b>7 dias para enviar</b><small>Retorno analisado, ajuste feito em até 10 dias além do envio.</small></div>
     </div>
   </div>
 </section>
 
 <!-- ================= PERGUNTAS ================= -->
-<section id="perguntas" style="padding-top:0">
+<section id="perguntas" style="padding-top:0" data-bloco>
   <div class="wrap">
     <div class="faq" id="faq"></div>
   </div>
 </section>
 
 <!-- ================= FECHO ================= -->
-<section class="fecho">
+<section class="fecho" data-bloco>
   <div class="cometa" style="top:8%;animation-delay:.4s"></div>
   <div class="cometa" style="top:52%;animation-delay:2.6s"></div>
   <div class="wrap">
-    <div class="caixa rev">
+    <div class="caixa rev" data-ent="doislados">
       <img class="assina" src="img-fada/logo-texto.png" alt="Logotipo Fada Espacial">
       <div class="rot">⋆ Encomenda aberta ⋆</div>
       <h2>Sua peça<br>ainda não existe</h2>
@@ -715,7 +773,7 @@ const grade = document.getElementById('grade');
 function pinta(lista){
   if(!lista.length){grade.innerHTML = '<div class="vazio">Nada encontrado nessa busca. Tente Drops, Acessórios, Coleções ou Sob Medida.</div>';return;}
   grade.innerHTML = lista.map(p=>`
-    <article class="card${p.destaque?' grande':''} rev" data-cat="${p.cat}">
+    <article class="card${p.destaque?' grande':''} rev" data-ent="sobe" data-cat="${p.cat}">
       <div class="arte">
         <span class="etiq">${p.cat}</span>
         <span class="etiq unica">Única</span>
@@ -773,7 +831,7 @@ const PERG = [
   ['Atendimento','O atendimento é humanizado, leve e feito com troca verdadeira. Aqui, cada criação nasce também da conexão e da energia entre fada e cliente. A experiência vai além da peça: é sobre se sentir vista, acolhida e parte do processo criativo.']
 ];
 document.getElementById('faq').innerHTML = PERG.map((p,i)=>`
-  <div class="item rev" data-open="0">
+  <div class="item rev" data-ent="gira" data-open="0">
     <button type="button">${p[0]}<span class="mais">+</span></button>
     <div class="resp"><p>${p[1]}</p></div>
   </div>`).join('');
@@ -955,7 +1013,8 @@ function observa(){
       });
     },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
   }
-  document.querySelectorAll('.rev:not(.on)').forEach(el=>io.observe(el));
+  /* a coreografia assumiu a entrada; o observador antigo so cuida do que nao tem gesto */
+  document.querySelectorAll('.rev:not([data-ent])').forEach(el=>io.observe(el));
 }
 observa();
 
@@ -1076,12 +1135,167 @@ observa();
   })();
 })();
 
-/* hero entra na carga, escalonado */
-window.addEventListener('load',()=>{
-  document.querySelectorAll('.hero .rev').forEach((el,i)=>{
-    setTimeout(()=>el.classList.add('on'), 180 + i*180);
+(function(){
+
+  /* ============================================================
+     MOTOR DE COREOGRAFIA
+     Gramatica e numeros lidos no bundle do landonorris.com em 19/08/2026:
+       varredura .... clip 600ms power2.out, barra de cor 600ms power2.inOut
+                      recuando na metade da revelacao, 150ms entre irmaos
+       oval ......... clip 1500ms power2.inOut, elipse do topo ou da base
+     power2.out = cubic-bezier(.215,.61,.355,1)
+     power2.inOut = cubic-bezier(.645,.045,.355,1)
+     O movimento roda pela API de animacao do navegador, nao por transicao
+     de CSS: assim cada gesto tem estado consultavel e termina onde deve.
+     ============================================================ */
+  var COR_VARRE = getComputedStyle(document.documentElement).getPropertyValue("--rosa").trim()||"#d904a8";
+  var PASSO = 150;
+  var SAIDA = 'cubic-bezier(.215,.61,.355,1)';
+  var DENTRO_FORA = 'cubic-bezier(.645,.045,.355,1)';
+  var MOLA = 'cubic-bezier(.16,1,.3,1)';
+
+  var GESTOS = {
+    ovaltopo:  { d:1500, e:DENTRO_FORA, de:{clipPath:'ellipse(20% 0% at 50% 0%)'},   para:{clipPath:'ellipse(140% 160% at 50% 0%)'} },
+    ovalbase:  { d:1500, e:DENTRO_FORA, de:{clipPath:'ellipse(20% 0% at 50% 100%)'}, para:{clipPath:'ellipse(140% 160% at 50% 100%)'} },
+    sobe:      { d:1050, e:DENTRO_FORA, de:{clipPath:'inset(100% 0% 0% 0%)', transform:'translate3d(0,46px,0)'}, para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
+    doislados: { d:1100, e:DENTRO_FORA, de:{clipPath:'inset(0% 50% 0% 50%)', transform:'scaleX(.9)'},            para:{clipPath:'inset(0% 0% 0% 0%)', transform:'scaleX(1)'} },
+    gira:      { d:1150, e:MOLA,        de:{transform:'rotate(-13deg) scale(.62) translate3d(0,54px,0)', filter:'blur(14px)'}, para:{transform:'rotate(0deg) scale(1) translate3d(0,0,0)', filter:'blur(0px)'} },
+    zoom:      { d:1600, e:MOLA,        de:{transform:'scale(1.22)', filter:'blur(20px)'},                       para:{transform:'scale(1)', filter:'blur(0px)'} }
+  };
+
+  /* varredura: barra de cor atravessa, o texto aparece atras dela, a barra recua */
+  function varrer(el, dir, atraso){
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    var barra = document.createElement('i');
+    barra.className = 'barraVarre';
+    barra.style.background = COR_VARRE;
+    barra.style.transformOrigin = (dir === 'esq') ? 'left center' : 'right center';
+    el.appendChild(barra);
+    el.style.opacity = '1';
+
+    var fechado = (dir === 'esq') ? 'inset(0% 0% 0% 100%)' : 'inset(0% 100% 0% 0%)';
+    var aberto  = 'inset(0% 0% 0% 0%)';
+    el.style.clipPath = fechado;
+
+    setTimeout(function(){
+      var a = el.animate([{clipPath:fechado},{clipPath:aberto}], {duration:600, easing:SAIDA, fill:'forwards'});
+      function abrir(){ el.style.clipPath = 'none'; try{ a.cancel(); }catch(e){} }
+      a.finished.then(abrir).catch(function(){});
+      setTimeout(abrir, 860);
+      setTimeout(function(){
+        var b = barra.animate([{transform:'scaleX(1)'},{transform:'scaleX(0)'}], {duration:600, easing:DENTRO_FORA, fill:'forwards'});
+        function tirar(){ if (barra.parentNode) barra.parentNode.removeChild(barra); }
+        b.finished.then(tirar).catch(function(){});
+        setTimeout(tirar, 860);
+      }, 300);
+    }, atraso);
+  }
+
+  function acionar(el, atraso){
+    var nome = el.getAttribute('data-ent') || 'zoom';
+    if (nome === 'varredir' || nome === 'varreesq'){ varrer(el, nome === 'varreesq' ? 'esq' : 'dir', atraso); return; }
+    var g = GESTOS[nome] || GESTOS.zoom;
+    setTimeout(function(){
+      var de   = Object.assign({opacity:0}, g.de);
+      var para = Object.assign({opacity:1}, g.para);
+      var a = el.animate([de, para], {duration:g.d, easing:g.e, fill:'forwards'});
+      function assentar(){
+        /* grava o estado final e solta a camada: filtro parado custa pintura a toa */
+        el.classList.add('feito'); el.style.willChange = 'auto';
+        try{ a.cancel(); }catch(e){}
+      }
+      a.finished.then(assentar).catch(function(){});
+      /* rede de seguranca: aba em segundo plano nao entrega o evento de fim,
+         e conteudo invisivel e pior que conteudo sem animacao */
+      setTimeout(assentar, g.d + 260);
+    }, atraso);
+  }
+
+  function coreografar(bloco){
+    if (!bloco) return;
+    var itens = [].slice.call(bloco.querySelectorAll('[data-ent]'));
+    itens.forEach(function(el, i){
+      var passo = el.hasAttribute('data-b') ? (+el.getAttribute('data-b') || 0) : i;
+      acionar(el, 110 + passo * PASSO);
+    });
+  }
+
+  var obsCoreo = new IntersectionObserver(function(ents){
+    ents.forEach(function(e){
+      if (e.isIntersecting && !e.target.dataset.coreo){ e.target.dataset.coreo = '1'; coreografar(e.target); }
+    });
+  }, { threshold:.14, rootMargin:'0px 0px -8% 0px' });
+
+  function ligarCoreografia(){
+    document.querySelectorAll('[data-bloco]').forEach(function(b){ obsCoreo.observe(b); });
+  }
+
+  /* ---------- cortina de abertura ----------
+     A sequencia na ordem que o Levi descreveu:
+     abre grande, fecha num quadrado, a assinatura se desenha, e desce.
+     No landonorris.com essa cena e um arquivo Rive, formato de animacao
+     autoral tocado por maquina de estados. Aqui ela e desenhada na mao,
+     em SVG por traco, sem nenhuma dependencia externa. */
+  function abertura(aoTerminar){
+    var cort = document.getElementById('cortina');
+    if (!cort){ aoTerminar(); return; }
+    var caixa  = cort.querySelector('.assina');
+    var fundo  = cort.querySelector('.fundoCort');
+    var tracos = [].slice.call(cort.querySelectorAll('.traco'));
+    var selo   = cort.querySelector('.selo');
+    var anima  = function(el, quadros, opcoes){
+      var a = el.animate(quadros, Object.assign({fill:'forwards'}, opcoes));
+      /* aba em segundo plano nao entrega o evento de fim: o estado final entra na marra */
+      setTimeout(function(){
+        var f = quadros[quadros.length-1];
+        for (var k in f){ el.style[k] = f[k]; }
+        try{ a.cancel(); }catch(e){}
+      }, (opcoes.duration||0) + (opcoes.delay||0) + 90);
+      return a;
+    };
+
+    /* 1. abre grande e 2. fecha num quadrado centrado */
+    var lado = Math.min(window.innerWidth, window.innerHeight) * 0.46;
+    var hx = Math.max(0, (window.innerWidth  - lado) / 2 / window.innerWidth  * 100);
+    var hy = Math.max(0, (window.innerHeight - lado) / 2 / window.innerHeight * 100);
+    var quadrado = 'inset(' + hy.toFixed(2) + '% ' + hx.toFixed(2) + '% ' + hy.toFixed(2) + '% ' + hx.toFixed(2) + '%)';
+    anima(fundo, [{clipPath:'inset(0% 0% 0% 0%)'},{clipPath:quadrado}],
+          {duration:1050, delay:240, easing:'cubic-bezier(.645,.045,.355,1)'});
+    anima(caixa, [{opacity:0, transform:'scale(.86)'},{opacity:1, transform:'scale(1)'}],
+          {duration:900, delay:300, easing:'cubic-bezier(.16,1,.3,1)'});
+
+    /* 3. a assinatura se desenha dentro do quadrado */
+    tracos.forEach(function(t, i){
+      var c = t.getTotalLength ? t.getTotalLength() : 900;
+      t.style.strokeDasharray = c;
+      anima(t, [{strokeDashoffset:c},{strokeDashoffset:0}],
+            {duration:1050, delay:1180 + i*160, easing:'cubic-bezier(.645,.045,.355,1)'});
+    });
+    if (selo){
+      /* o traco recua quando a marca entra: a assinatura conduz, a marca conclui */
+      tracos.forEach(function(t){ anima(t, [{opacity:1},{opacity:.3}], {duration:700, delay:1820, easing:'ease'}); });
+      anima(selo, [{opacity:0, transform:'scale(.8)'},{opacity:1, transform:'scale(1)'}],
+            {duration:900, delay:1800, easing:'cubic-bezier(.16,1,.3,1)'});
+    }
+
+    /* 4. desce e entrega a pagina */
+    setTimeout(function(){
+      anima(cort, [{transform:'translate3d(0,0,0)'},{transform:'translate3d(0,112vh,0)'}],
+            {duration:1050, easing:'cubic-bezier(.645,.045,.355,1)'});
+      document.body.classList.remove('travado');
+      aoTerminar();
+      setTimeout(function(){ if (cort.parentNode) cort.parentNode.removeChild(cort); }, 1200);
+    }, 3050);
+  }
+
+  window.addEventListener('load', function(){
+    abertura(function(){
+      var hero=document.querySelector('.hero');
+      coreografar(hero); hero.dataset.coreo='1';
+      ligarCoreografia();
+    });
   });
-});
+})();
 </script>
 </body>
 </html>
