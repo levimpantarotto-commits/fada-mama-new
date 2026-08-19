@@ -210,7 +210,7 @@ h1 .marca-sub{display:block;padding-left:.2em;margin-top:.1em;
   background:radial-gradient(64% 48% at 50% 42%,rgba(157,78,221,.30),transparent 72%)}
 .palcoAberto canvas{position:absolute;inset:0;width:100%;height:100%}
 .hero{flex-direction:column;justify-content:center;text-align:center;overflow:hidden}
-.heroTxt{position:relative;z-index:3;max-width:none;margin-top:min(46vh,430px);
+.heroTxt{position:relative;z-index:3;max-width:none;margin-top:min(54vh,480px);
   display:flex;flex-direction:column;align-items:center}
 .heroTxt .frase{max-width:min(46ch,88vw);font-size:clamp(19px,1.85vw,27px);line-height:1.24;
   text-wrap:balance;text-align:center;margin-inline:auto}
@@ -244,7 +244,7 @@ h1 .marca-sub{display:block;padding-left:.2em;margin-top:.1em;
 .logoUfo{position:absolute;left:50%;top:34%;width:clamp(56px,7vw,104px);
   filter:drop-shadow(0 0 20px rgba(157,78,221,.7));
   will-change:transform}
-.palcoAberto .brilhoLogo{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);width:min(58vw,720px);aspect-ratio:1;border-radius:var(--r-pill);
+.palcoAberto .brilhoLogo{position:absolute;left:50%;top:34%;transform:translate(-50%,-50%);width:min(58vw,720px);aspect-ratio:1;border-radius:50%;
   pointer-events:none;filter:blur(58px);
   background:radial-gradient(circle,rgba(217,4,168,.55),rgba(157,78,221,.26) 52%,transparent 74%);
   animation:pulsaBrilho 5.2s ease-in-out infinite}
@@ -258,7 +258,7 @@ h1 .marca-sub{display:block;padding-left:.2em;margin-top:.1em;
   letter-spacing:.18em;text-transform:uppercase;color:var(--mudo);opacity:.8}
 
 /* orbita decorativa */
-.orbita{position:absolute;left:50%;top:34%;width:min(74vw,860px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:var(--r-pill);pointer-events:none;
+.orbita{position:absolute;left:50%;top:34%;width:min(74vw,860px);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;
   border:1px dashed rgba(200,182,255,.22);animation:gira 44s linear infinite}
 .orbita.b{width:min(96vw,1120px);border-color:rgba(255,158,0,.16);animation-duration:70s;animation-direction:reverse}
 @keyframes gira{to{transform:rotate(360deg)}}
@@ -416,20 +416,17 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
+/* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador.
+   nenhum gesto usa recorte: borda reta de clip-path le como quadrado entrando. */
 [data-ent]{ opacity:0; }
-[data-ent="gira"]{ transform:rotate(-13deg) scale(.62) translate3d(0,54px,0); filter:blur(14px); transform-origin:50% 120%; }
-[data-ent="sobe"]{ clip-path:inset(100% 0 0 0); transform:translate3d(0,46px,0); }
-[data-ent="doislados"]{ clip-path:inset(0 50% 0 50%); transform:scaleX(.9); }
-[data-ent="ovaltopo"]{ clip-path:ellipse(20% 0% at 50% 0%); }
-[data-ent="ovalbase"]{ clip-path:ellipse(20% 0% at 50% 100%); }
+[data-ent="porbaixo"]{ transform:translate3d(0,120px,0) scale(.96); filter:blur(12px); }
+[data-ent="delado"]{ transform:translate3d(-140px,72px,0) rotate(-4deg); filter:blur(10px); }
+[data-ent="deladodir"]{ transform:translate3d(140px,72px,0) rotate(4deg); filter:blur(10px); }
+[data-ent="flutua"]{ transform:translate3d(0,150px,0) rotate(-2.4deg) scale(.9); filter:blur(16px); }
+[data-ent="gira"]{ transform:rotate(-11deg) scale(.68) translate3d(-60px,80px,0); filter:blur(14px); transform-origin:50% 120%; }
 [data-ent="zoom"]{ transform:scale(1.22); filter:blur(20px); }
-[data-ent="cortina"]{ clip-path:inset(0 0 100% 0); transform:translate3d(0,-24px,0); }
-[data-ent="ladoesq"]{ clip-path:inset(0 0 0 34%); transform:translate3d(-64px,0,0); }
-[data-ent="ladodir"]{ clip-path:inset(0 34% 0 0); transform:translate3d(64px,0,0); }
-[data-ent="iris"]{ clip-path:circle(0% at 50% 50%); transform:scale(1.06); }
 [data-ent="letras"]{ opacity:0; }
-[data-ent].feito{ opacity:1; transform:none; filter:none; clip-path:none; }
-.barraVarre{ position:absolute; inset:0; z-index:5; display:block; pointer-events:none; transform:scaleX(1); }
+[data-ent].feito{ opacity:1; transform:none; filter:none; }
 
 /* ---------- cena de abertura ---------- */
 #cortina{position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;will-change:clip-path}
@@ -533,13 +530,13 @@ body.travado{overflow:hidden}
   </div>
 
   <div class="wrap heroTxt">
-    <div class="rot rev" data-ent="varredir">Goiânia ⋆ upcycling ⋆ peça única</div>
-    <p class="frase rev" data-ent="sobe">Entre fadas, bruxas e sereias, universos se entrelaçam para dar vida a infinitas expressões de ser.</p>
-    <div class="acoes rev" data-ent="doislados">
+    <div class="rot rev" data-ent="delado" data-deriva="15">Goiânia ⋆ upcycling ⋆ peça única</div>
+    <p class="frase rev" data-ent="porbaixo">Entre fadas, bruxas e sereias, universos se entrelaçam para dar vida a infinitas expressões de ser.</p>
+    <div class="acoes rev" data-ent="flutua" data-deriva="20">
       <a class="btn p" href="#vitrine">Ver a vitrine <span class="seta">⇾</span></a>
       <a class="btn s" href="http://ig.me/m/looksfadaespacial" target="_blank" rel="noopener">Falar com a fada</a>
     </div>
-    <div class="dica rev" data-ent="iris">Mova o mouse ⋆ role a página</div>
+    <div class="dica rev" data-ent="flutua" data-deriva="20">Mova o mouse ⋆ role a página</div>
   </div>
 </section>
 
@@ -551,10 +548,10 @@ body.travado{overflow:hidden}
   <div class="wrap">
     <div class="cabec">
       <div>
-        <div class="rot rev" data-ent="ladodir">⋆ Vitrine Astral ⋆</div>
-        <h2 class="rev" data-ent="cortina" style="margin-top:14px">Cada retalho<br>tem voz</h2>
+        <div class="rot rev" data-ent="deladodir" data-deriva="15">⋆ Vitrine Astral ⋆</div>
+        <h2 class="rev" data-ent="porbaixo" style="margin-top:14px">Cada retalho<br>tem voz</h2>
       </div>
-      <p class="rev" data-ent="sobe">Quatro caminhos dentro do universo da fada. Nenhuma peça sai igual à outra.</p>
+      <p class="rev" data-ent="porbaixo">Quatro caminhos dentro do universo da fada. Nenhuma peça sai igual à outra.</p>
     </div>
 
     <div class="chips" id="chips">
@@ -576,7 +573,7 @@ body.travado{overflow:hidden}
 <!-- ================= RETRATO DA MARCA ================= -->
 <section class="sobre" id="sobre" data-bloco>
   <div class="wrap sobreGrid">
-    <div class="rev" data-ent="gira">
+    <div class="rev" data-ent="gira" data-deriva="26">
       <div class="retrato">
         <div class="anel"></div><div class="anel b"></div>
         <img src="img-fada/isadora-fada.png" alt="Isadora Schwartz, criadora da Fada Espacial" loading="lazy" decoding="async">
@@ -585,11 +582,11 @@ body.travado{overflow:hidden}
     </div>
     <div class="sobreTxt">
       <img class="selo-ufo rev" data-ent="gira" src="img-fada/logo-ufo.png" alt="Disco voador da Fada Espacial">
-      <div class="rot rev" data-ent="ladoesq">⋆ Sobre a Fada ⋆</div>
+      <div class="rot rev" data-ent="delado" data-deriva="15">⋆ Sobre a Fada ⋆</div>
       <h2 class="rev" data-ent="letras" style="margin-top:14px;max-width:14ch">Quem costura o universo</h2>
-      <p class="rev" data-ent="ladodir">A Fada Espacial, criada por Isadora Schwartz, é mais do que uma marca, é um universo onde imaginação, identidade e liberdade se encontram. A marca nasce dando vida a looks únicos, feitos sob medida, que vão além de raves e festivais.</p>
-      <p class="rev" data-ent="ladodir">Aqui, cada retalho tem voz e cada costura carrega uma intenção. Acreditamos no poder da transformação através do upcycling e na magia da criação freestyle, onde nenhuma peça é igual à outra e cada criação carrega sua própria história astral.</p>
-      <div class="acoes rev" data-ent="doislados">
+      <p class="rev" data-ent="deladodir">A Fada Espacial, criada por Isadora Schwartz, é mais do que uma marca, é um universo onde imaginação, identidade e liberdade se encontram. A marca nasce dando vida a looks únicos, feitos sob medida, que vão além de raves e festivais.</p>
+      <p class="rev" data-ent="deladodir">Aqui, cada retalho tem voz e cada costura carrega uma intenção. Acreditamos no poder da transformação através do upcycling e na magia da criação freestyle, onde nenhuma peça é igual à outra e cada criação carrega sua própria história astral.</p>
+      <div class="acoes rev" data-ent="flutua" data-deriva="20">
         <a class="btn s" href="https://instagram.com/looksfadaespacial" target="_blank" rel="noopener">Ver o Instagram <span class="seta">⇾</span></a>
       </div>
     </div>
@@ -599,14 +596,14 @@ body.travado{overflow:hidden}
 <!-- ================= CONFIANCA ================= -->
 <section id="confianca" data-bloco>
   <div class="wrap">
-    <div class="rot rev" data-ent="ladodir">⋆ Guia da Fada ⋆</div>
-    <h2 class="rev" data-ent="cortina" style="margin-top:14px;max-width:16ch">O processo, sem letra miúda</h2>
+    <div class="rot rev" data-ent="deladodir" data-deriva="15">⋆ Guia da Fada ⋆</div>
+    <h2 class="rev" data-ent="porbaixo" style="margin-top:14px;max-width:16ch">O processo, sem letra miúda</h2>
 
     <div class="confia">
-      <div class="pastilha rev" data-ent="ladoesq"><div class="rot">Pagamento</div><b>Pix ou link</b><small>No link dá para parcelar. As taxas ficam por conta da cliente.</small></div>
-      <div class="pastilha rev" data-ent="ladodir"><div class="rot">Entrega</div><b>Goiânia no dia seguinte</b><small>Envio via ônibus com entregadora. Demais regiões pelos Correios.</small></div>
-      <div class="pastilha rev" data-ent="ladoesq"><div class="rot">Prazo</div><b>30 dias de antecedência</b><small>Encomenda sob medida pede agenda. Complexidade do look altera o prazo.</small></div>
-      <div class="pastilha rev" data-ent="ladodir"><div class="rot">Ajuste</div><b>7 dias para enviar</b><small>Retorno analisado, ajuste feito em até 10 dias além do envio.</small></div>
+      <div class="pastilha rev" data-ent="delado" data-deriva="15"><div class="rot">Pagamento</div><b>Pix ou link</b><small>No link dá para parcelar. As taxas ficam por conta da cliente.</small></div>
+      <div class="pastilha rev" data-ent="deladodir" data-deriva="15"><div class="rot">Entrega</div><b>Goiânia no dia seguinte</b><small>Envio via ônibus com entregadora. Demais regiões pelos Correios.</small></div>
+      <div class="pastilha rev" data-ent="delado" data-deriva="15"><div class="rot">Prazo</div><b>30 dias de antecedência</b><small>Encomenda sob medida pede agenda. Complexidade do look altera o prazo.</small></div>
+      <div class="pastilha rev" data-ent="deladodir" data-deriva="15"><div class="rot">Ajuste</div><b>7 dias para enviar</b><small>Retorno analisado, ajuste feito em até 10 dias além do envio.</small></div>
     </div>
   </div>
 </section>
@@ -623,7 +620,7 @@ body.travado{overflow:hidden}
   <div class="cometa" style="top:8%;animation-delay:.4s"></div>
   <div class="cometa" style="top:52%;animation-delay:2.6s"></div>
   <div class="wrap">
-    <div class="caixa rev" data-ent="doislados">
+    <div class="caixa rev" data-ent="flutua" data-deriva="20">
       <img class="assina" src="img-fada/logo-texto.png" alt="Logotipo Fada Espacial">
       <div class="rot">⋆ Encomenda aberta ⋆</div>
       <h2>Sua peça<br>ainda não existe</h2>
@@ -777,7 +774,7 @@ const grade = document.getElementById('grade');
 function pinta(lista){
   if(!lista.length){grade.innerHTML = '<div class="vazio">Nada encontrado nessa busca. Tente Drops, Acessórios, Coleções ou Sob Medida.</div>';return;}
   grade.innerHTML = lista.map(p=>`
-    <article class="card${p.destaque?' grande':''} rev" data-ent="doislados" data-cat="${p.cat}">
+    <article class="card${p.destaque?' grande':''} rev" data-ent="flutua" data-deriva="20" data-cat="${p.cat}">
       <div class="arte">
         <span class="etiq">${p.cat}</span>
         <span class="etiq unica">Única</span>
@@ -835,7 +832,7 @@ const PERG = [
   ['Atendimento','O atendimento é humanizado, leve e feito com troca verdadeira. Aqui, cada criação nasce também da conexão e da energia entre fada e cliente. A experiência vai além da peça: é sobre se sentir vista, acolhida e parte do processo criativo.']
 ];
 document.getElementById('faq').innerHTML = PERG.map((p,i)=>`
-  <div class="item rev" data-ent="doislados" data-open="0">
+  <div class="item rev" data-ent="flutua" data-deriva="20" data-open="0">
     <button type="button">${p[0]}<span class="mais">+</span></button>
     <div class="resp"><p>${p[1]}</p></div>
   </div>`).join('');
@@ -1159,19 +1156,19 @@ observa();
   var MOLA = 'cubic-bezier(.16,1,.3,1)';
 
   var GESTOS = {
-    ovaltopo:  { d:1500, e:DENTRO_FORA, de:{clipPath:'ellipse(20% 0% at 50% 0%)'},   para:{clipPath:'ellipse(140% 160% at 50% 0%)'} },
-    ovalbase:  { d:1500, e:DENTRO_FORA, de:{clipPath:'ellipse(20% 0% at 50% 100%)'}, para:{clipPath:'ellipse(140% 160% at 50% 100%)'} },
-    sobe:      { d:1050, e:DENTRO_FORA, de:{clipPath:'inset(100% 0% 0% 0%)', transform:'translate3d(0,46px,0)'}, para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
-    doislados: { d:1100, e:DENTRO_FORA, de:{clipPath:'inset(0% 50% 0% 50%)', transform:'scaleX(.9)'},            para:{clipPath:'inset(0% 0% 0% 0%)', transform:'scaleX(1)'} },
-    gira:      { d:1150, e:MOLA,        de:{transform:'rotate(-13deg) scale(.62) translate3d(0,54px,0)', filter:'blur(14px)'}, para:{transform:'rotate(0deg) scale(1) translate3d(0,0,0)', filter:'blur(0px)'} },
-    zoom:      { d:1600, e:MOLA,        de:{transform:'scale(1.22)', filter:'blur(20px)'},                       para:{transform:'scale(1)', filter:'blur(0px)'} },
-    cortina:   { d:1000, e:DENTRO_FORA, de:{clipPath:'inset(0% 0% 100% 0%)', transform:'translate3d(0,-24px,0)'}, para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
-    ladoesq:   { d:950,  e:MOLA,        de:{clipPath:'inset(0% 0% 0% 34%)', transform:'translate3d(-64px,0,0)'},  para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
-    ladodir:   { d:950,  e:MOLA,        de:{clipPath:'inset(0% 34% 0% 0%)', transform:'translate3d(64px,0,0)'},   para:{clipPath:'inset(0% 0% 0% 0%)', transform:'translate3d(0,0,0)'} },
-    iris:      { d:1250, e:DENTRO_FORA, de:{clipPath:'circle(0% at 50% 50%)', transform:'scale(1.06)'},           para:{clipPath:'circle(130% at 50% 50%)', transform:'scale(1)'} }
+    /* nada aqui usa recorte: borda reta de clip-path le como quadrado entrando.
+       o que da o ar artistico e a peca vir de fora da tela, pelo lado e por baixo,
+       com inclinacao e desfoque que se resolvem no lugar. */
+    porbaixo:  { d:1250, e:MOLA, de:{transform:'translate3d(0,120px,0) scale(.96)',            filter:'blur(12px)'}, para:{transform:'translate3d(0,0,0) scale(1)', filter:'blur(0px)'} },
+    delado:    { d:1350, e:MOLA, de:{transform:'translate3d(-140px,72px,0) rotate(-4deg)',     filter:'blur(10px)'}, para:{transform:'translate3d(0,0,0) rotate(0deg)', filter:'blur(0px)'} },
+    deladodir: { d:1350, e:MOLA, de:{transform:'translate3d(140px,72px,0) rotate(4deg)',       filter:'blur(10px)'}, para:{transform:'translate3d(0,0,0) rotate(0deg)', filter:'blur(0px)'} },
+    flutua:    { d:1450, e:MOLA, de:{transform:'translate3d(0,150px,0) rotate(-2.4deg) scale(.9)', filter:'blur(16px)'}, para:{transform:'translate3d(0,0,0) rotate(0deg) scale(1)', filter:'blur(0px)'} },
+    gira:      { d:1250, e:MOLA, de:{transform:'rotate(-11deg) scale(.68) translate3d(-60px,80px,0)', filter:'blur(14px)'}, para:{transform:'rotate(0deg) scale(1) translate3d(0,0,0)', filter:'blur(0px)'} },
+    zoom:      { d:1600, e:MOLA, de:{transform:'scale(1.22)', filter:'blur(20px)'}, para:{transform:'scale(1)', filter:'blur(0px)'} }
   };
 
-  /* letra por letra: o titulo se monta em vez de aparecer inteiro */
+  /* letra por letra, sem quebrar palavra:
+     cada palavra vira um bloco que nao parte, e as letras vivem dentro dele */
   function porLetra(el, atraso){
     if (el.dataset.dividido) return;
     el.dataset.dividido = '1';
@@ -1179,11 +1176,18 @@ observa();
     [].slice.call(el.childNodes).forEach(function(no){
       if (no.nodeType !== 3) return;
       var frag = document.createDocumentFragment();
-      no.nodeValue.split('').forEach(function(c){
-        if (c === ' '){ frag.appendChild(document.createTextNode(' ')); return; }
-        var s = document.createElement('span');
-        s.textContent = c; s.style.display = 'inline-block'; s.style.opacity = '0';
-        frag.appendChild(s); pecas.push(s);
+      no.nodeValue.split(/(\s+)/).forEach(function(pedaco){
+        if (pedaco === '') return;
+        if (/^\s+$/.test(pedaco)){ frag.appendChild(document.createTextNode(' ')); return; }
+        var palavra = document.createElement('span');
+        palavra.style.display = 'inline-block';
+        palavra.style.whiteSpace = 'nowrap';
+        pedaco.split('').forEach(function(c){
+          var s = document.createElement('span');
+          s.textContent = c; s.style.display = 'inline-block'; s.style.opacity = '0';
+          palavra.appendChild(s); pecas.push(s);
+        });
+        frag.appendChild(palavra);
       });
       el.replaceChild(frag, no);
     });
@@ -1227,7 +1231,6 @@ observa();
 
   function acionar(el, atraso){
     var nome = el.getAttribute('data-ent') || 'zoom';
-    if (nome === 'varredir' || nome === 'varreesq'){ varrer(el, nome === 'varreesq' ? 'esq' : 'dir', atraso); return; }
     if (nome === 'letras'){ setTimeout(function(){ porLetra(el, 0); }, atraso); return; }
     var g = GESTOS[nome] || GESTOS.zoom;
     setTimeout(function(){
@@ -1236,7 +1239,7 @@ observa();
       var a = el.animate([de, para], {duration:g.d, easing:g.e, fill:'forwards'});
       function assentar(){
         /* grava o estado final e solta a camada: filtro parado custa pintura a toa */
-        el.classList.add('feito'); el.style.willChange = 'auto';
+        el.classList.add('feito'); el.dataset.entrou = '1'; el.style.willChange = 'auto';
         try{ a.cancel(); }catch(e){}
       }
       a.finished.then(assentar).catch(function(){});
@@ -1260,6 +1263,35 @@ observa();
       if (e.isIntersecting && !e.target.dataset.coreo){ e.target.dataset.coreo = '1'; coreografar(e.target); }
     });
   }, { threshold:.14, rootMargin:'0px 0px -8% 0px' });
+
+  /* deriva no scroll: depois de entrar, a peca acompanha a rolagem em ritmo proprio.
+     E o que separa pagina que "aparece" de pagina que se move. */
+  function ligarDeriva(){
+    var itens = [].slice.call(document.querySelectorAll('[data-deriva]'));
+    if (!itens.length) return;
+    var alvo = [], atual = [];
+    itens.forEach(function(){ alvo.push(0); atual.push(0); });
+    function medir(){
+      var meio = window.innerHeight/2;
+      itens.forEach(function(el,i){
+        var r = el.getBoundingClientRect();
+        var d = ((r.top + r.height/2) - meio) / meio;
+        alvo[i] = Math.max(-1.2, Math.min(1.2, d)) * (+el.getAttribute('data-deriva') || 18);
+      });
+    }
+    function pintar(){
+      for (var i=0;i<itens.length;i++){
+        atual[i] += (alvo[i] - atual[i]) * 0.085;
+        if (itens[i].classList.contains('feito') || itens[i].dataset.entrou === '1'){
+          itens[i].style.transform = 'translate3d(0,' + atual[i].toFixed(2) + 'px,0)';
+        }
+      }
+      requestAnimationFrame(pintar);
+    }
+    window.addEventListener('scroll', medir, {passive:true});
+    window.addEventListener('resize', medir);
+    medir(); pintar();
+  }
 
   function ligarCoreografia(){
     document.querySelectorAll('[data-bloco]').forEach(function(b){ obsCoreo.observe(b); });
@@ -1362,7 +1394,7 @@ observa();
     abertura(function(){
       var hero=document.querySelector('.hero');
       coreografar(hero); hero.dataset.coreo='1';
-      ligarCoreografia();
+      ligarCoreografia(); ligarDeriva();
     });
   });
 })();
