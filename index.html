@@ -418,7 +418,12 @@ footer{border-top:1px solid rgba(200,182,255,.16);padding-block:var(--s5)}
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador */
 /* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador.
    nenhum gesto usa recorte: borda reta de clip-path le como quadrado entrando. */
+/* estado inicial de cada gesto; o movimento roda pela API de animacao do navegador.
+   nenhum gesto usa recorte: borda reta de clip-path le como quadrado entrando. */
 [data-ent]{ opacity:0; }
+/* elemento com gesto proprio nao herda estado inicial de sistema antigo:
+   o .rev da Fada trazia blur(18px) que gesto nenhum desfazia */
+.rev[data-ent], [data-b][data-ent]{ transform:none; filter:none; }
 [data-ent="porbaixo"]{ transform:translate3d(0,120px,0) scale(.96); filter:blur(12px); }
 [data-ent="delado"]{ transform:translate3d(-140px,72px,0) rotate(-4deg); filter:blur(10px); }
 [data-ent="deladodir"]{ transform:translate3d(140px,72px,0) rotate(4deg); filter:blur(10px); }
@@ -1192,6 +1197,8 @@ observa();
       el.replaceChild(frag, no);
     });
     el.style.opacity = '1';
+    el.classList.add('feito'); el.dataset.entrou = '1';
+    el.style.filter = 'none'; el.style.transform = 'none';
     pecas.forEach(function(s, i){
       setTimeout(function(){
         var a = s.animate([{opacity:0, transform:'translate3d(0,64%,0) rotate(7deg)'},{opacity:1, transform:'none'}],
